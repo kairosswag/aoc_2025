@@ -13,7 +13,13 @@ mod tests_day_01 {
     use crate::run;
     #[test]
     fn test() {
-        let test_iput = "<fillme>";
-        assert_eq!((5, 5), run(test_iput.as_bytes()));
+        let test_iput = "L250\nL200";
+        assert_eq!((2, 5), run(test_iput.as_bytes()));
+    }
+
+    #[test]
+    fn test2() {
+        let test_iput = "L51\nR100";
+        assert_eq!((0, 2), run(test_iput.as_bytes()));
     }
 }
