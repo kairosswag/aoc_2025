@@ -1,5 +1,7 @@
 use std::io;
 use std::io::Write;
+use std::thread::sleep;
+use std::time::Duration;
 use day01::run;
 pub fn main() {
     let stdin = io::stdin();
@@ -8,8 +10,10 @@ pub fn main() {
     stdout.flush().expect("Could not write 'go'");
     let (p1, p2) = run(stdin.lock());
 
-    println!("Part 1: {}", p1);
-    println!("Part 2: {}", p2);
+    let mut lock = stdout.lock();
+    lock.write(&p1.to_string().as_bytes()).expect("Could not write out.");
+    lock.write(&['\n' as u8]).expect("Could not write out.");
+    lock.write(&p2.to_string().as_bytes()).expect("Could not write out.");
 }
 
 #[cfg(test)]

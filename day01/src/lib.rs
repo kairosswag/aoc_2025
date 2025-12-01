@@ -15,7 +15,7 @@ where
             "L" => {
                 let new_pos = current_pos - value;
                 if new_pos <= 0 {
-                    zero_counter_p2 += (new_pos / 100).abs();
+                    zero_counter_p2 += new_pos / -100;
                     if current_pos != 0 {
                         zero_counter_p2 += 1;
                     }
@@ -23,10 +23,8 @@ where
                 current_pos = new_pos;
             },
             "R" => {
-                if (100 - current_pos) <= value {
-                    zero_counter_p2 += 1 + ((value - (100 - current_pos)) / 100);
-                }
-                current_pos += value
+                current_pos += value;
+                zero_counter_p2 += current_pos / 100;
             },
             _ => panic!("unknown direction"),
         }
