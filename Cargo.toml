@@ -1,10 +1,10 @@
-[workspace]
-resolver = "2"
+[profile.bench]
+debug = 2
 
+[workspace]
 members = [
     "aoc_util",
     "day01",
+    "day02",
 ]
-
-[profile.bench]
-debug = true
+resolver = "2"
