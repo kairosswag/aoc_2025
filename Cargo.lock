@@ -199,6 +199,7 @@ dependencies = [
  "aoc_util",
  "criterion",
  "hashbrown 0.15.5",
+ "rayon",
 ]
 
 [[package]]

@@ -1,5 +1,6 @@
 use std::io::BufRead;
 use hashbrown::HashMap;
+use rayon::prelude::*;
 
 pub fn run<R>(reader: R) -> (u64, u64)
 where
@@ -7,18 +8,11 @@ where
 {
     let categories = [vec![], vec![], vec![2], vec![3], vec![2], vec![5], vec![2, 3], vec![7], vec![2], vec![3], vec![2, 5], vec![11], vec![2, 3]];
     let line = reader.lines().next().unwrap().unwrap();
-    let split = line.split(",");
-    let mut total_sum_p1 = 0;
-    let mut total_sum_p2 = 0;
-    for line in  split {
-        let (first, last) = line.split_once("-").unwrap();
-        let (res_p1, res_p2) = sum_doubles(first.parse().unwrap(), first.len(), last.parse().unwrap(), last.len(), &categories);
-        total_sum_p1 += res_p1 as u64;
-        total_sum_p2 += res_p2 as u64;
-    }
+    let split = line.split(",").enumerate();
+    split.par_bridge().map(|(_, line)| line.split_once("-").unwrap() )
+        .map(|(first, last)| sum_doubles(first.parse().unwrap(), first.len(), last.parse().unwrap(), last.len(), &categories))
+        .reduce(|| (0, 0), |acc, (a, b)| (acc.0 + a, acc.1 + b))
 
-    (total_sum_p1, total_sum_p2)
-    
 }
 
 fn sum_doubles(first_number: u64, first_len: usize, last_number: u64, last_len: usize, category_splits: &[Vec<usize>]) -> (u64, u64) {
