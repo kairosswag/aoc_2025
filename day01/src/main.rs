@@ -1,8 +1,6 @@
+use day01::run;
 use std::io;
 use std::io::Write;
-use std::thread::sleep;
-use std::time::Duration;
-use day01::run;
 pub fn main() {
     let stdin = io::stdin();
     let mut stdout = io::stdout();
