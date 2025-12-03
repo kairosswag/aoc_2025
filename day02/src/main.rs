@@ -33,4 +33,23 @@ mod tests_day_02 {
         let test_iput = "95-115";
         assert_eq!((99, 210), run(test_iput.as_bytes()));
     }
+
+    #[test]
+    fn test_single_3() {
+        let test_iput = "565653-565659";
+        assert_eq!((0, 565656), run(test_iput.as_bytes()));
+    }
+
+    #[test]
+    fn test_cutting() {
+        assert_eq!(13, day02::calculate_start(6, 2, 6, 121312)); // 12
+    }
+
+
+    #[test]
+    fn test_cutting_2() {
+        assert_eq!(566, day02::calculate_start(6, 3, 6, 565653)); // 12
+    }
+
+
 }
