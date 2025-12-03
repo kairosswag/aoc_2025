@@ -1,9 +1,11 @@
 use day02::run;
 use std::io;
 use std::io::Write;
+use rayon::ThreadPoolBuilder;
 
 pub fn main() {
     let stdin = io::stdin();
+    ThreadPoolBuilder::new().num_threads(4).build_global().unwrap();
     let mut stdout = io::stdout();
     stdout.lock().write(&['g' as u8, 'o' as u8, '\n' as u8]).expect("Could not write out.");
     stdout.flush().expect("Could not write 'go'");
