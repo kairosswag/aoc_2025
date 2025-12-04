@@ -1,7 +1,7 @@
 use day02::run;
+use rayon::ThreadPoolBuilder;
 use std::io;
 use std::io::Write;
-use rayon::ThreadPoolBuilder;
 
 pub fn main() {
     let stdin = io::stdin();
@@ -18,6 +18,8 @@ pub fn main() {
 #[cfg(test)]
 mod tests_day_02 {
     use crate::run;
+
+
     #[test]
     fn test() {
         let test_iput = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124";
