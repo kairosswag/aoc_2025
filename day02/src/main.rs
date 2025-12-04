@@ -2,6 +2,7 @@ use day02::run;
 use rayon::ThreadPoolBuilder;
 use std::io;
 use std::io::Write;
+use std::time::Instant;
 
 pub fn main() {
     let stdin = io::stdin();
@@ -9,10 +10,12 @@ pub fn main() {
     let mut stdout = io::stdout();
     stdout.lock().write(&['g' as u8, 'o' as u8, '\n' as u8]).expect("Could not write out.");
     stdout.flush().expect("Could not write 'go'");
+    let start = Instant::now();
     let (p1, p2) = run(stdin.lock());
 
     println!("Part 1: {}", p1);
     println!("Part 2: {}", p2);
+    println!("Time: {:?}", start.elapsed());
 }
 
 #[cfg(test)]
