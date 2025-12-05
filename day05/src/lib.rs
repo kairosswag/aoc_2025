@@ -45,12 +45,9 @@ where
     let mut curr_max_end = 0;
     let mut total_fresh = 0;
     for ((lower, _), idx) in from_map.iter() {
-        println!("Checking: {}-{}", lower, end_idx[*idx]);
-        println!("Current range is {curr_start:?} - {curr_max_end:?}");
         if let Some(curr_start_val) = curr_start {
             if *lower > curr_max_end {
                 let add = (curr_max_end - curr_start_val) + 1;
-                println!("Leaving end range, adding {add}");
                 total_fresh += add;
                 curr_start = Some(*lower);
                 curr_max_end = end_idx[*idx];
@@ -66,7 +63,6 @@ where
         }
     }
     let add = (curr_max_end - curr_start.unwrap()) + 1;
-    println!("Leaving end range, adding {add}");
     total_fresh += add;
 
     (fresh_count, total_fresh)
