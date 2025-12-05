@@ -41,28 +41,24 @@ where
         }
     }
 
-    let mut curr_start = None;
-    let mut curr_max_end = 0;
+    let first = from_map.iter().next().unwrap();
+    let mut curr_start = first.0.0;
+    let mut curr_max_end = end_idx[*first.1];
     let mut total_fresh = 0;
     for ((lower, _), idx) in from_map.iter() {
-        if let Some(curr_start_val) = curr_start {
-            if *lower > curr_max_end {
-                let add = (curr_max_end - curr_start_val) + 1;
-                total_fresh += add;
-                curr_start = Some(*lower);
-                curr_max_end = end_idx[*idx];
-            } else {
-                let range_end = end_idx[*idx];
-                if range_end > curr_max_end {
-                    curr_max_end = range_end;
-                }
-            }
-        }  else {
-            curr_start = Some(*lower);
+        if *lower > curr_max_end {
+            let add = (curr_max_end - curr_start) + 1;
+            total_fresh += add;
+            curr_start = *lower;
             curr_max_end = end_idx[*idx];
+        } else {
+            let range_end = end_idx[*idx];
+            if range_end > curr_max_end {
+                curr_max_end = range_end;
+            }
         }
     }
-    let add = (curr_max_end - curr_start.unwrap()) + 1;
+    let add = (curr_max_end - curr_start) + 1;
     total_fresh += add;
 
     (fresh_count, total_fresh)
