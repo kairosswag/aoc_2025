@@ -1,0 +1,77 @@
+use std::collections::BTreeMap;
+use std::io::BufRead;
+use hashbrown::HashSet;
+
+pub fn run<R>(reader: R) -> (usize, usize)
+where
+    R: BufRead,
+{
+    let mut from_map: BTreeMap<(usize, usize), usize> = BTreeMap::new();
+    let mut to_map: BTreeMap<(usize, usize), usize> = BTreeMap::new();
+    let mut end_idx = Vec::new();
+    let mut line_iter = reader.lines().into_iter();
+    line_iter.by_ref().map(|v| v.unwrap()).enumerate().take_while(|(_, l)| l.is_empty() == false).for_each(|(idx, line)| {
+        let splits = line.split_once('-').unwrap();
+
+        let lower: usize = splits.0.parse().unwrap();
+        let mut ins_dupl_idx = 0;
+        while from_map.contains_key(&(lower, ins_dupl_idx)) {
+            ins_dupl_idx += 1;
+        }
+        from_map.insert((lower, ins_dupl_idx), idx);
+
+        let upper: usize = splits.1.parse().unwrap();
+        ins_dupl_idx = 0;
+        while to_map.contains_key(&(upper, ins_dupl_idx)) {
+            ins_dupl_idx += 1;
+        }
+        to_map.insert((upper, ins_dupl_idx), idx);
+        end_idx.push(upper);
+    });
+
+    let mut fresh_count = 0;
+    'items: for item in line_iter {
+        let item: usize = item.unwrap().parse().unwrap();
+        let res = from_map.range(..=(item, usize::MAX)).map(|val| *val.1).collect::<HashSet<usize>>();
+        for (_, xv) in to_map.range((item, 0)..) {
+            if res.contains(xv) {
+                fresh_count += 1;
+                continue 'items;
+            }
+        }
+    }
+
+    let mut curr_start = None;
+    let mut curr_max_end = 0;
+    let mut total_fresh = 0;
+    for ((lower, _), idx) in from_map.iter() {
+        println!("Checking: {}-{}", lower, end_idx[*idx]);
+        println!("Current range is {curr_start:?} - {curr_max_end:?}");
+        if let Some(curr_start_val) = curr_start {
+            if *lower > curr_max_end {
+                let add = (curr_max_end - curr_start_val) + 1;
+                println!("Leaving end range, adding {add}");
+                total_fresh += add;
+                curr_start = Some(*lower);
+                curr_max_end = end_idx[*idx];
+            } else {
+                let range_end = end_idx[*idx];
+                if range_end > curr_max_end {
+                    curr_max_end = range_end;
+                }
+            }
+        }  else {
+            curr_start = Some(*lower);
+            curr_max_end = end_idx[*idx];
+        }
+    }
+    let add = (curr_max_end - curr_start.unwrap()) + 1;
+    println!("Leaving end range, adding {add}");
+    total_fresh += add;
+
+    (fresh_count, total_fresh)
+    
+}
+
+
+
